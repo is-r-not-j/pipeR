@@ -45,6 +45,10 @@ eval_formula <- function(x, expr, envir, side_effect) {
     if (is.symbol(expr)) {
       # ~ symbol: assign
       value <- envir[[as.character(expr)]] <- x
+    } else if (as.character(expr)[1]=="~"){
+      # ~~ symbol: assign constant
+      value <- envir[[as.character(expr)[2]]] <- x
+      lockBinding(as.character(expr)[2],envir)
     } else {
       # ~ expr: side effect
       value <- pipe_dot(x, expr, envir)
